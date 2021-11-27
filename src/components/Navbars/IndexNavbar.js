@@ -27,13 +27,6 @@ export default function IndexNavbar() {
   const [account, setAccount] = React.useState(null);
   const [btnConnectText, setBtnConnectText] = React.useState("Connect to wallet");
 
-  React.useEffect(() => {
-    connectWallet();
-    window.addEventListener("scroll", changeColor);
-    return function cleanup() {
-      window.removeEventListener("scroll", changeColor);
-    };
-  },[]);
 
   const connectWallet = async () => {
     if(window.ethereum) {
@@ -55,6 +48,8 @@ export default function IndexNavbar() {
         const TokenContract = new web3.eth.Contract(TOKEN_API, TOKEN_ADDRESS);
         const bl = await TokenContract.methods.balanceOf(accounts[0]).call();
         console.log(bl);
+
+        console.log(account);
       } catch (error) {
         console.error(error);
       }
@@ -63,6 +58,12 @@ export default function IndexNavbar() {
     }
   }
 
+  React.useEffect(() => {
+    window.addEventListener("scroll", changeColor);
+    return function cleanup() {
+      window.removeEventListener("scroll", changeColor);
+    };
+  },[]);
   
 
   window.ethereum.on('chainChanged', handleChainChanged);
@@ -95,11 +96,11 @@ export default function IndexNavbar() {
   const onCollapseExited = () => {
     setCollapseOut("");
   };
-  const scrollToDownload = () => {
-    document
-      .getElementById("download-section")
-      .scrollIntoView({ behavior: "smooth" });
-  };
+  // const scrollToDownload = () => {
+  //   document
+  //     .getElementById("download-section")
+  //     .scrollIntoView({ behavior: "smooth" });
+  // };
   return (
     <Navbar className={"fixed-top " + color} color-on-scroll="100" expand="lg">
       <Container>
