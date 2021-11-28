@@ -36,7 +36,9 @@ export default function IndexNavbar() {
   }
 
   React.useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     onConnectWallet();
+    
     function handleChainChanged(_chainId) {
       // We recommend reloading the page, unless you must do otherwise
       window.location.reload();
