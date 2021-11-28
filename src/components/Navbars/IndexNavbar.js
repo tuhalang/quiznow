@@ -36,7 +36,7 @@ export default function IndexNavbar() {
   }
 
   React.useEffect(() => {
-    onConnectWallet();
+    // onConnectWallet();
     function handleChainChanged(_chainId) {
       // We recommend reloading the page, unless you must do otherwise
       window.location.reload();
