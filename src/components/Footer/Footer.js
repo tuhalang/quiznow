@@ -18,7 +18,7 @@ export default function Footer() {
       <Container>
         <Row>
           <Col md="3">
-            <h1 className="title">BLK•</h1>
+            <h1 className="title">Quiz•Now</h1>
           </Col>
           <Col md="3">
             <Nav>
@@ -29,12 +29,12 @@ export default function Footer() {
               </NavItem>
               <NavItem>
                 <NavLink to="/landing-page" tag={Link}>
-                  Landing
+                  Create Quiz
                 </NavLink>
               </NavItem>
               <NavItem>
                 <NavLink to="/register-page" tag={Link}>
-                  Register
+                  Create Quiz
                 </NavLink>
               </NavItem>
               <NavItem>
@@ -47,18 +47,13 @@ export default function Footer() {
           <Col md="3">
             <Nav>
               <NavItem>
-                <NavLink href="https://creative-tim.com/contact-us?ref=blkdsr-footer">
+                <NavLink href="mail://tuhalang007@outlook.com.vn">
                   Contact Us
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="https://creative-tim.com/about-us?ref=blkdsr-footer">
+                <NavLink href="https:facebook.com/hung.pv99">
                   About Us
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="https://creative-tim.com/blog?ref=blkdsr-footer">
-                  Blog
                 </NavLink>
               </NavItem>
               <NavItem>
