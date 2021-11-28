@@ -1,8 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Web3 from "web3";
-import {TOKEN_API, TOKEN_ADDRESS} from "../../contracts/Token";
-// reactstrap components
+import {useDispatch, useSelector} from "react-redux";
+import {connectWallet} from "../../reducer/action";
 import {
   Button,
   Collapse,
@@ -21,57 +20,33 @@ import {
 } from "reactstrap";
 
 export default function IndexNavbar() {
+  const dispatch = useDispatch()
+  const {account} = useSelector(state => state.common)
+
   const [collapseOpen, setCollapseOpen] = React.useState(false);
   const [collapseOut, setCollapseOut] = React.useState("");
   const [color, setColor] = React.useState("navbar-transparent");
-  const [account, setAccount] = React.useState(null);
-  const [btnConnectText, setBtnConnectText] = React.useState("Connect to wallet");
-
-
-  const connectWallet = async () => {
-    if(window.ethereum) {
-      try {
-        // Will open the MetaMask UI
-        // You should disable this button while the request is pending!
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        setAccount(accounts[0]);
-        setBtnConnectText(accounts[0].slice(0, 8) + "..." + accounts[0].slice(-6, -1));
-
-        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-        // handleChainChanged(chainId);
-        console.log(chainId);
-
-        const web3 = new Web3(window.ethereum);
-        const balance = await web3.eth.getBalance(accounts[0]);
-        console.log(balance);
-
-        const TokenContract = new web3.eth.Contract(TOKEN_API, TOKEN_ADDRESS);
-        const bl = await TokenContract.methods.balanceOf(accounts[0]).call();
-        console.log(bl);
-
-        console.log(account);
-      } catch (error) {
-        console.error(error);
+  
+  const onConnectWallet = async () => {
+    dispatch(connectWallet((err) => {
+      if(err !== undefined){
+        alert(err);
       }
-    }else{
-      alert("Please install metamask !");
-    }
+    }))
   }
 
   React.useEffect(() => {
+    // onConnectWallet();
+    function handleChainChanged(_chainId) {
+      // We recommend reloading the page, unless you must do otherwise
+      window.location.reload();
+    }
+    window.ethereum.on('chainChanged', handleChainChanged);
     window.addEventListener("scroll", changeColor);
     return function cleanup() {
       window.removeEventListener("scroll", changeColor);
     };
   },[]);
-  
-
-  window.ethereum.on('chainChanged', handleChainChanged);
-
-  function handleChainChanged(_chainId) {
-    // We recommend reloading the page, unless you must do otherwise
-    window.location.reload();
-  }
 
   const changeColor = () => {
     if (
@@ -96,17 +71,13 @@ export default function IndexNavbar() {
   const onCollapseExited = () => {
     setCollapseOut("");
   };
-  // const scrollToDownload = () => {
-  //   document
-  //     .getElementById("download-section")
-  //     .scrollIntoView({ behavior: "smooth" });
-  // };
+ 
   return (
     <Navbar className={"fixed-top " + color} color-on-scroll="100" expand="lg">
       <Container>
         <div className="navbar-translate">
           <NavbarBrand to="/" tag={Link} id="navbar-brand">
-            <span>Quiz me</span>
+            <span>Quiz•Now</span>
           </NavbarBrand>
           <button
             aria-expanded={collapseOpen}
@@ -213,23 +184,14 @@ export default function IndexNavbar() {
             </UncontrolledDropdown>
             <NavItem>
               <Button
-                onClick={connectWallet}
+                onClick={onConnectWallet}
                 className="nav-link d-none d-lg-block"
                 color="primary"
                 target="_blank"
               >
-                <i className="tim-icons icon-spaceship" /> {btnConnectText}
+                <i className="tim-icons icon-spaceship" /> {account === "" ? "Connect to wallet" : account.slice(0,5) + "..." + account.slice(-5, -1)}
               </Button>
             </NavItem>
-            {/* <NavItem>
-              <Button
-                className="nav-link d-none d-lg-block"
-                color="default"
-                onClick={scrollToDownload}
-              >
-                <i className="tim-icons icon-cloud-download-93" /> Download
-              </Button>
-            </NavItem> */}
           </Nav>
         </Collapse>
       </Container>
