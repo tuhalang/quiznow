@@ -1,7 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
-import {connectWallet} from "../../reducer/action";
 import {
   Button,
   Collapse,
@@ -18,25 +16,17 @@ import {
   Row,
   Col,
 } from "reactstrap";
+import { useWeb3 } from '../../hooks';
 
 export default function IndexNavbar() {
-  const dispatch = useDispatch()
-  const {account} = useSelector(state => state.common)
 
   const [collapseOpen, setCollapseOpen] = React.useState(false);
   const [collapseOut, setCollapseOut] = React.useState("");
   const [color, setColor] = React.useState("navbar-transparent");
-  
-  const onConnectWallet = async () => {
-    dispatch(connectWallet((err) => {
-      if(err !== undefined){
-        alert(err);
-      }
-    }))
-  }
+
+  const {account}= useWeb3();
 
   React.useEffect(() => {
-    // onConnectWallet();
     function handleChainChanged(_chainId) {
       // We recommend reloading the page, unless you must do otherwise
       window.location.reload();
@@ -46,7 +36,7 @@ export default function IndexNavbar() {
     return function cleanup() {
       window.removeEventListener("scroll", changeColor);
     };
-  },[]);
+  }, []);
 
   const changeColor = () => {
     if (
@@ -71,7 +61,7 @@ export default function IndexNavbar() {
   const onCollapseExited = () => {
     setCollapseOut("");
   };
- 
+
   return (
     <Navbar className={"fixed-top " + color} color-on-scroll="100" expand="lg">
       <Container>
@@ -168,7 +158,7 @@ export default function IndexNavbar() {
                   <i className="tim-icons icon-paper" />
                   Documentation
                 </DropdownItem>
-                <DropdownItem tag={Link} to="/register-page">
+                <DropdownItem tag={Link} to="/quizzes">
                   <i className="tim-icons icon-bullet-list-67" />
                   Register Page
                 </DropdownItem>
@@ -184,12 +174,11 @@ export default function IndexNavbar() {
             </UncontrolledDropdown>
             <NavItem>
               <Button
-                onClick={onConnectWallet}
                 className="nav-link d-none d-lg-block"
                 color="primary"
                 target="_blank"
               >
-                <i className="tim-icons icon-spaceship" /> {account === "" ? "Connect to wallet" : account.slice(0,5) + "..." + account.slice(-5, -1)}
+                <i className="tim-icons icon-spaceship" /> {(account === undefined || account === "") ? "Connect to wallet" : account.slice(0, 5) + "..." + account.slice(37, 42)}
               </Button>
             </NavItem>
           </Nav>

@@ -14,7 +14,7 @@ import rootSage from "./reducer/saga";
 
 import Index from "views/Index.js";
 import LandingPage from "views/examples/LandingPage.js";
-import RegisterPage from "views/examples/RegisterPage.js";
+import CreateQuizPage from "views/examples/CreateQuizPage";
 import ProfilePage from "views/examples/ProfilePage.js";
 
 const sagaMiddleware = createSagaMiddleware();
@@ -31,8 +31,12 @@ ReactDOM.render(
           render={(props) => <LandingPage {...props} />}
         />
         <Route
-          path="/register-page"
-          render={(props) => <RegisterPage {...props} />}
+          exact path="/quizzes"
+          render={(props) => <CreateQuizPage {...props} />}
+        />
+        <Route
+          exact path="/quizzes/:id"
+          render={(props) => <ProfilePage {...props} />}
         />
         <Route
           path="/profile-page"
