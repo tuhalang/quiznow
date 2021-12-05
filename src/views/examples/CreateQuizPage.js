@@ -27,7 +27,7 @@ import IndexNavbar from "components/Navbars/IndexNavbar";
 import { useWeb3, WriteContract } from "hooks";
 import { CREATE_QUIZ_WITH_ANSWER } from '../../contracts/Quiz';
 import { useHistory } from "react-router-dom";
-import { createQuiz, getQuiz } from "../../reducer/action";
+import { createQuiz } from "../../reducer/action";
 import { useDispatch } from "react-redux";
 import { sha256 } from "js-sha256";
 

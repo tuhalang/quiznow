@@ -19,57 +19,61 @@ export function useWeb3() {
   const [quizContract, setQuizContract] = useState(undefined);
   const [quizToken, setQuizToken] = useState(undefined);
 
-  useEffect(async () => {
-    let _accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-    let _chainId = await window.ethereum.request({ method: 'eth_chainId' });
+  useEffect(() => {
+    async function connectWallet() {
+      let _accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+      let _chainId = await window.ethereum.request({ method: 'eth_chainId' });
 
-    if (_accounts[0] !== account || _chainId !== chainId) {
+      if (_accounts[0] !== account || _chainId !== chainId) {
 
-      if (CHAIN_ID !== _chainId) {
-        try {
-          await window.ethereum.request({
-            method: 'wallet_switchEthereumChain',
-            params: [{ chainId: CHAIN_ID }],
-          });
-        } catch (switchError) {
-          console.log(switchError)
-          if (switchError.code === 4902) {
-            try {
-              await window.ethereum.request({
-                method: 'wallet_addEthereumChain',
-                params: [
-                  {
-                    "chainId": CHAIN_ID,
-                    chainName: CHAIN_NAME,
-                    nativeCurrency: {
-                      name: NATIVE_TOKEN_NAME,
-                      symbol: NATIVE_TOKEN_SYMBOL,
-                      decimals: NATIVE_TOKEN_DECIMALS
-                    },
-                    blockExplorerUrls: [BLOCK_EXPLORER],
-                    "rpcUrls": [RPC_URL]
-                  }
-                ],
-              });
-            } catch (addError) {
-              console.log(addError)
+        if (CHAIN_ID !== _chainId) {
+          try {
+            await window.ethereum.request({
+              method: 'wallet_switchEthereumChain',
+              params: [{ chainId: CHAIN_ID }],
+            });
+          } catch (switchError) {
+            console.log(switchError)
+            if (switchError.code === 4902) {
+              try {
+                await window.ethereum.request({
+                  method: 'wallet_addEthereumChain',
+                  params: [
+                    {
+                      "chainId": CHAIN_ID,
+                      chainName: CHAIN_NAME,
+                      nativeCurrency: {
+                        name: NATIVE_TOKEN_NAME,
+                        symbol: NATIVE_TOKEN_SYMBOL,
+                        decimals: NATIVE_TOKEN_DECIMALS
+                      },
+                      blockExplorerUrls: [BLOCK_EXPLORER],
+                      "rpcUrls": [RPC_URL]
+                    }
+                  ],
+                });
+              } catch (addError) {
+                console.log(addError)
+              }
             }
           }
+
+          _accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+          _chainId = await window.ethereum.request({ method: 'eth_chainId' });
         }
 
-        _accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-        _chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        const _quizWeb3 = new Web3(window.ethereum);
+        const _quizContract = new _quizWeb3.eth.Contract(QUIZ_ABI, QUIZ_ADDRESS);
+        const _quizToken = new _quizWeb3.eth.Contract(TOKEN_ABI, TOKEN_ADDRESS);
+        setAccount(_accounts[0]);
+        setChainId(_chainId);
+        setQuizWeb3(_quizWeb3);
+        setQuizContract(_quizContract);
+        setQuizToken(_quizToken);
       }
-
-      const _quizWeb3 = new Web3(window.ethereum);
-      const _quizContract = new _quizWeb3.eth.Contract(QUIZ_ABI, QUIZ_ADDRESS);
-      const _quizToken = new _quizWeb3.eth.Contract(TOKEN_ABI, TOKEN_ADDRESS);
-      setAccount(_accounts[0]);
-      setChainId(_chainId);
-      setQuizWeb3(_quizWeb3);
-      setQuizContract(_quizContract);
-      setQuizToken(_quizToken);
     }
+
+    connectWallet();
   }, [account, chainId]);
 
   return { account, chainId, quizWeb3, quizContract, quizToken };

@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from 'redux-saga/effects'
+import { call, takeLatest } from 'redux-saga/effects'
 import _ from "lodash";
 import repository from '../../api/repository';
 
@@ -8,20 +8,19 @@ import {
 
 function* createQuiz(action) {
   try{
-    const res = yield call((payload) => repository.updateQuiz(payload), action.payload);
-    console.log(res);
-    if (_.isFunction(action.callback)) action.callback(res, null);
+    yield call((payload) => repository.updateQuiz(payload), action.payload);
+    if (_.isFunction(action.callback)) action.callback(null);
   }catch(e){
-    if (_.isFunction(action.callback)) action.callback(null, e);
+    if (_.isFunction(action.callback)) action.callback(e);
   }
 }
 
 function* getQuiz(action) {
   try{
     const res = yield call((payload) => repository.getQuiz(payload), action.payload);
-    if (_.isFunction(action.callback)) action.callback(null);
+    if (_.isFunction(action.callback)) action.callback(res, null);
   }catch(e){
-    if (_.isFunction(action.callback)) action.callback(e);
+    if (_.isFunction(action.callback)) action.callback(null, e);
   }
 }
 
