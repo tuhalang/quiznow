@@ -308,7 +308,7 @@ export default function QuizPage({ match: { params: { id } } }) {
                         tabs
                       >
                         <NavItem>
-                          {(quiz.status === 1 && getStatusQuiz() === 2) ?
+                          {(quiz.status === 1 && (getStatusQuiz() === 2 || quiz.type === 1)) ?
                             <NavLink
                               className={classnames({
                                 active: tabs === 1,
