@@ -2,6 +2,7 @@
   "name": "quiz",
   "version": "1.0.0",
   "main": "index.js",
+  "publicPath": "/quiznow",
   "homepage": "https://tuhalang.github.io/quiznow/",
   "dependencies": {
     "@testing-library/jest-dom": "5.11.6",
