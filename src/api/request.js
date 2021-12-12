@@ -27,14 +27,18 @@ export default function getInstanceAxios(baseAPI) {
         function (response) {
             try {
                 if (response.status >= 200 && response.status < 300)
-                    return response.data
-                return Promise.reject(response.data)
+                    return response.data;
+                return Promise.reject(response.data);
             } catch (error) {
-                return Promise.reject(error)
+                return Promise.reject(error);
             }
         },
         async function (error) {
-            return Promise.reject(error)
+            console.log(error.response.status === 404)
+            if(error.response.status === 404){
+                window.location.replace("/404");
+            }
+            return Promise.reject(error);
         }
     )
 

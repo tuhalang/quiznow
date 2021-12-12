@@ -25,11 +25,19 @@ import {
 import Footer from "components/Footer/Footer.js";
 import IndexNavbar from "components/Navbars/IndexNavbar";
 import { useWeb3, WriteContract } from "hooks";
-import { CREATE_QUIZ_WITH_ANSWER } from '../../contracts/Quiz';
+import { CREATE_QUIZ_WITH_ANSWER, CREATE_QUIZ_NO_ANSWER } from '../contracts/Quiz';
 import { useHistory } from "react-router-dom";
-import { createQuiz } from "../../reducer/action";
+import { createQuiz } from "../reducer/action";
 import { useDispatch } from "react-redux";
 import { sha256 } from "js-sha256";
+import { css } from "@emotion/react";
+import DotLoader from "react-spinners/DotLoader";
+
+const override = css`
+  position: absolute;
+  top: 20%;
+  left: 45%;
+`;
 
 export default function CreateQuizPage() {
   const [squares1to6, setSquares1to6] = React.useState("");
@@ -40,6 +48,7 @@ export default function CreateQuizPage() {
   const [expireDateVotting, setExpireDateVotting] = React.useState("");
   const [reward, setReward] = React.useState(0);
   const [answer, setAnswer] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
 
   const { account, quizContract } = useWeb3();
   const history = useHistory();
@@ -48,34 +57,51 @@ export default function CreateQuizPage() {
   const diffExpireDate = (expireDate) => {
     if (expireDate === "")
       return null
-
     const diff = new Date(expireDate) - new Date()
+
     return Math.floor(diff / 1000)
   }
 
   const onCreateQuiz = () => {
+    setLoading(true);
     let method;
     let params;
     let value = reward * 1e18;
     if (iconTabs === 2) {
-      method = "";
+      method = CREATE_QUIZ_NO_ANSWER;
       params = [sha256(quiz), diffExpireDate(expireDate), diffExpireDate(expireDateVotting)];
+      if(params[1] <= 0 || params[2] <= 0){
+        alert("Cannot choose date in the past");
+        setLoading(false);
+        return;
+      }
+      if(params[2] <= params[1]){
+        alert("The moment finish voting cannot before the moment finish answer");
+        setLoading(false);
+        return;
+      }
     } else {
       method = CREATE_QUIZ_WITH_ANSWER;
-      params = [sha256(quiz), sha256(answer), diffExpireDate(expireDate)]
+      params = [sha256(quiz), sha256(answer)]
     }
-    const callback = (e) => {
-      const id = e.events.CreateQuestion.returnValues.id;
-      const owner = account;
+    const callback = (e, res) => {
+      if (e === null) {
+        const id = res.events.CreateQuiz.returnValues.id;
+        const owner = account;
 
-      dispatch(createQuiz(id, iconTabs, owner, quiz, answer, diffExpireDate(expireDate), diffExpireDate(expireDateVotting), (err) => {
-        console.log(err)
-        if (err == null) {
-          history.push("/quizzes/" + id)
-        } else {
-          alert(err);
-        }
-      }));
+        dispatch(createQuiz(id, owner, quiz, answer, (err) => {
+          setLoading(false);
+          if (err == null) {
+            history.push("/quizzes/" + id)
+          } else {
+            alert(err);
+          }
+        }));
+      } else {
+        setLoading(false);
+        alert(e.message);
+      }
+
     }
     WriteContract(quizContract, account, method, params, value, callback);
   }
@@ -119,6 +145,9 @@ export default function CreateQuizPage() {
       <div className="wrapper">
         <div className="page-header">
           <div className="page-header-image" />
+          <div className="dotLoader" hidden={!loading}>
+            <DotLoader css={override} color={"#ffffff"} loading={true} size={150} />
+          </div>
           <div className="content">
             <Container>
               <Row>
@@ -193,21 +222,6 @@ export default function CreateQuizPage() {
                                       type="textarea"
                                       onChange={onChangeAnswer}
                                       value={answer}
-                                    />
-                                  </Col>
-                                </FormGroup>
-                                <FormGroup row>
-                                  <Label for="expire" sm={2} >
-                                    <b>Expire date</b>
-                                  </Label>
-                                  <Col sm={10}>
-                                    <Input
-                                      id="expire"
-                                      name="expireDate"
-                                      type="datetime-local"
-                                      data-date-format="yyyy-MM-ddThh:mm"
-                                      onChange={onChangeExpireDate}
-                                      value={expireDate}
                                     />
                                   </Col>
                                 </FormGroup>
@@ -301,7 +315,11 @@ export default function CreateQuizPage() {
                               </Form>
                             </CardBody>
                             <CardFooter>
-                              <Button className="btn-round" color="primary" size="lg">
+                              <Button
+                                onClick={onCreateQuiz}
+                                className="btn-round"
+                                color="primary"
+                                size="lg">
                                 Create Quiz
                               </Button>
                             </CardFooter>

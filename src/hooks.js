@@ -86,7 +86,9 @@ export function WriteContract(contract, account, method, params, value, callback
       from: account
     }
   ).on('receipt', (receipt) => {
-    callback(receipt);
+    callback(null, receipt);
+  }).on('error', function (error, receipt) {
+    callback(error, receipt)
   });
 }
 

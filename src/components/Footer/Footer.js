@@ -28,18 +28,8 @@ export default function Footer() {
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink to="/landing-page" tag={Link}>
+                <NavLink to="/quizzes" tag={Link}>
                   Create Quiz
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink to="/register-page" tag={Link}>
-                  Create Quiz
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink to="/profile-page" tag={Link}>
-                  Profile
                 </NavLink>
               </NavItem>
             </Nav>
@@ -69,7 +59,7 @@ export default function Footer() {
               <Button
                 className="btn-icon btn-neutral btn-round btn-simple"
                 color="default"
-                href="https://twitter.com/creativetim"
+                href="https://twitter.com/tuhalang"
                 id="tooltip622135962"
                 target="_blank"
               >
@@ -81,7 +71,7 @@ export default function Footer() {
               <Button
                 className="btn-icon btn-neutral btn-round btn-simple"
                 color="default"
-                href="https://www.facebook.com/creativetim"
+                href="https://www.facebook.com/hung.pv99"
                 id="tooltip230450801"
                 target="_blank"
               >
@@ -89,18 +79,6 @@ export default function Footer() {
               </Button>
               <UncontrolledTooltip delay={0} target="tooltip230450801">
                 Like us
-              </UncontrolledTooltip>
-              <Button
-                className="btn-icon btn-neutral btn-round btn-simple"
-                color="default"
-                href="https://dribbble.com/creativetim"
-                id="tooltip318450378"
-                target="_blank"
-              >
-                <i className="fab fa-dribbble" />
-              </Button>
-              <UncontrolledTooltip delay={0} target="tooltip318450378">
-                Follow us
               </UncontrolledTooltip>
             </div>
           </Col>
