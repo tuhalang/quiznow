@@ -8,14 +8,14 @@ import createSagaMiddleware from 'redux-saga'
 import "assets/css/nucleo-icons.css";
 import "assets/scss/blk-design-system-react.scss?v=1.2.0";
 import "assets/demo/demo.css";
+import "assets/css/app.css"
 
 import rootReducer from "./reducer/redux"
 import rootSage from "./reducer/saga";
 
 import Index from "views/Index.js";
-import LandingPage from "views/examples/LandingPage.js";
-import CreateQuizPage from "views/examples/CreateQuizPage";
-import ProfilePage from "views/examples/ProfilePage.js";
+import CreateQuizPage from "views/CreateQuizPage";
+import QuizPage from "views/QuizPage";
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
@@ -25,24 +25,16 @@ ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
       <Switch>
-        <Route path="/components" render={(props) => <Index {...props} />} />
-        <Route
-          path="/landing-page"
-          render={(props) => <LandingPage {...props} />}
-        />
+        <Route path="/quiznow" render={(props) => <Index {...props} />} />
         <Route
           exact path="/quizzes"
           render={(props) => <CreateQuizPage {...props} />}
         />
         <Route
           exact path="/quizzes/:id"
-          render={(props) => <ProfilePage {...props} />}
+          render={(props) => <QuizPage {...props} />}
         />
-        <Route
-          path="/profile-page"
-          render={(props) => <ProfilePage {...props} />}
-        />
-        <Redirect from="/" to="/components" />
+        <Redirect from="/" to="/quiznow" />
       </Switch>
     </BrowserRouter>
   </Provider>,
