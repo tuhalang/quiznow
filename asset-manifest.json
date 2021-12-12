@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/quiznow/static/css/main.eeb79c96.chunk.css",
+    "main.js": "/quiznow/static/js/main.25740a37.chunk.js",
+    "main.js.map": "/quiznow/static/js/main.25740a37.chunk.js.map",
+    "runtime-main.js": "/quiznow/static/js/runtime-main.4978b2f0.js",
+    "runtime-main.js.map": "/quiznow/static/js/runtime-main.4978b2f0.js.map",
+    "static/js/2.5d543519.chunk.js": "/quiznow/static/js/2.5d543519.chunk.js",
+    "static/js/2.5d543519.chunk.js.map": "/quiznow/static/js/2.5d543519.chunk.js.map",
+    "index.html": "/quiznow/index.html",
+    "static/css/main.eeb79c96.chunk.css.map": "/quiznow/static/css/main.eeb79c96.chunk.css.map",
+    "static/js/2.5d543519.chunk.js.LICENSE.txt": "/quiznow/static/js/2.5d543519.chunk.js.LICENSE.txt",
+    "static/media/blk-design-system-react.scss?v=1.2.0": "/quiznow/static/media/square5.16283001.png",
+    "static/media/dots.png": "/quiznow/static/media/dots.1e305f98.png",
+    "static/media/nucleo-icons.css": "/quiznow/static/media/nucleo.bd5cce8b.eot",
+    "static/media/path1.png": "/quiznow/static/media/path1.a0d20b60.png",
+    "static/media/path3.png": "/quiznow/static/media/path3.3f66cc18.png",
+    "static/media/path4.png": "/quiznow/static/media/path4.cb1d9fab.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.4978b2f0.js",
+    "static/js/2.5d543519.chunk.js",
+    "static/css/main.eeb79c96.chunk.css",
+    "static/js/main.25740a37.chunk.js"
+  ]
+}
